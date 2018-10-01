@@ -1,0 +1,25 @@
+service: release-buddy
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: us-east-1
+
+plugins:
+  - serverless-offline
+
+functions:
+  release-buddy:
+    handler: handler.probot
+
+    environment:
+      WEBHOOK_SECRET: ${ssm:release-buddy-webhook-secret}
+      PRIVATE_KEY: ${ssm:release-buddy-private-key}
+      SENDGRID_API_KEY: ${ssm:release-buddy-sendgrid-api-key}
+      APP_ID: 18325
+      LOG_FORMAT: json
+
+    events:
+      - http:
+          path: /probot
+          method: post
