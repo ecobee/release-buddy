@@ -1,36 +1,25 @@
 const fetch = require('node-fetch')
 const slackifyMarkdown = require('slackify-markdown')
 
-const slackNotify = async (
-	slackSettings,
-	repositoryName,
-	releaseBody,
-	releaseUrl,
-	releaseVersion,
-	teamName
-) => {
+const slackNotify = async (slackSettings, repositoryName, releaseDetails, teamName) => {
 	const { slackWebhookUrl, userName, channel, iconEmoji, shipEmojis } = slackSettings
+	const { name: releaseName, body, url, version } = releaseDetails
 
-	const formattedBody = slackifyMarkdown(releaseBody)
+	const releaseNotes = slackifyMarkdown(body)
 
-	const includeTeamName = teamName && `*Team:* ${teamName}`
-
+	const includeTeamName = teamName ? `*Team:* ${teamName} \n\n` : ''
+	const includeReleaseName = releaseName ? `*Release Name:* ${releaseName} \n\n` : ''
 	const showShipEmojis = shipEmojis || ':ship: :ship: :ship: :ship: :ship:'
 
-	const additionalBody = `
-	${showShipEmojis} \n
-	${includeTeamName} \n
-	*Repository:* ${repositoryName} \n
-	*Version:* ${releaseVersion} \n
-	*Release Details:* \n
-	${formattedBody} \n
-	*Links:* \n
-	<${releaseUrl}|View release on Github> \n
-	${showShipEmojis}
-	`
+	const slackMessageText = `${showShipEmojis} \n\n${includeTeamName}*Repo:* ${repositoryName} \n\n*Version:* \`${version}\` \n\n${includeReleaseName}<${url}|View release on Github> \n\n${showShipEmojis}\n\n *Release Notes:*`
 
 	const data = {
-		text: additionalBody,
+		text: slackMessageText,
+		attachments: [
+			{
+				text: releaseNotes,
+			},
+		],
 		username: userName || `Release Notifier Bot`,
 		icon_emoji: iconEmoji,
 		channel,
