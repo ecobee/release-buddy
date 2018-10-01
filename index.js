@@ -5,16 +5,24 @@
 
 const getConfig = require('./src/getConfig')
 const slackNotify = require('./src/slackNotify')
+const sendEmail = require('./src/sendMail')
 
 module.exports = app => {
 	app.log('Yay, the app was loaded!')
 
 	app.on('release', async context => {
-		app.log("Yayyy we released. Now let's do dome stuff!")
+		app.log("Yayyy we released. Now let's do some stuff!")
 
 		const configPath = 'releaseNotifier.config.json'
 		const config = await getConfig(app.log, context, configPath)
 		const { release, repository } = context.payload
+
+		const releaseDetails = {
+			name: release.name,
+			body: release.body,
+			url: release.html_url,
+			version: release.tag_name,
+		}
 
 		if (!config) {
 			app.log(
@@ -22,50 +30,34 @@ module.exports = app => {
 			)
 			return
 		}
-		const { slackSettings, emailSettings } = config
+		const { slackSettings, emailSettings, teamName } = config
+		const { name: repositoryName } = repository
 
 		if (slackSettings && slackSettings.enabled === true) {
-			const repositoryName = repository.name
-			const releaseBody = release.body
-			const releaseUrl = release.html_url
-			const releaseVersion = release.tag_name
-			const { teamName } = config
-
-			const responseMsg = await slackNotify(
-				slackSettings,
-				repositoryName,
-				releaseBody,
-				releaseUrl,
-				releaseVersion,
-				teamName
-			)
+			const responseMsg = await slackNotify(slackSettings, repositoryName, releaseDetails, teamName)
 
 			app.log(responseMsg)
 		}
 
 		if (emailSettings && emailSettings.enabled === true) {
-			const { emailAddresses } = emailSettings
-			if (!emailAddresses) {
-				app.log(
-					'No email addresses defined. Please add an "emailAddresses" array property to the "emailSettings" object in releaseNotifier.config.json file.'
+			try {
+				const mailResponse = await sendEmail(
+					emailSettings,
+					releaseDetails,
+					repositoryName,
+					teamName
 				)
-				return
+				app.log(mailResponse)
+			} catch (error) {
+				app.log('Error sending email.')
+				app.log(error)
+
+				if (error.response.body.errors) {
+					app.log(error.response.body.errors)
+				} else {
+					app.log(error)
+				}
 			}
-			app.log(emailAddresses)
 		}
 	})
-
-	// app.on('release', async context => {
-	//   app.log('yayyy we released.')
-
-	//   const {owner, name} = context.payload.repository
-
-	//   const hello = await context.github.repos.getContent(context.repo({
-	//     path: 'version/v1.0.1.md',
-	//   }))
-
-	//   const content = Buffer.from(hello.data.content, 'base64').toString()
-
-	//   app.log(content)
-	// })
 }

@@ -13,7 +13,7 @@
 		"probot-app"
 	],
 	"scripts": {
-		"simulate:release": "yarn probot simulate release test/fixtures/release.published.json ./index.js",
+		"simulate": "yarn probot simulate release test/fixtures/release.published.json ./index.js",
 		"dev": "nodemon",
 		"start": "probot run ./index.js",
 		"lint": "standard --fix",
@@ -21,22 +21,27 @@
 		"test:watch": "jest --watch --notify --notifyMode=change --coverage"
 	},
 	"dependencies": {
+		"@probot/serverless-lambda": "^0.2.0",
+		"@sendgrid/mail": "^6.3.1",
+		"markdown": "^0.5.0",
 		"node-fetch": "^2.2.0",
 		"probot": "^7.2.0",
+		"remove-markdown": "^0.3.0",
 		"slackify-markdown": "^1.0.4"
 	},
 	"devDependencies": {
-		"jest": "^22.4.3",
-		"nodemon": "^1.17.2",
-		"smee-client": "^1.0.2",
-		"standard": "^10.0.3",
 		"eslint": "^5.3.0",
 		"eslint-config-airbnb": "^17.1.0",
 		"eslint-config-prettier": "^3.0.1",
 		"eslint-plugin-import": "^2.14.0",
 		"eslint-plugin-jsx-a11y": "^6.1.1",
 		"eslint-plugin-react": "^7.11.0",
-		"prettier": "^1.14.2"
+		"jest": "^22.4.3",
+		"nodemon": "^1.17.2",
+		"prettier": "^1.14.2",
+		"serverless-offline": "^3.25.17",
+		"smee-client": "^1.0.2",
+		"standard": "^10.0.3"
 	},
 	"engines": {
 		"node": ">= 8.3.0"
