@@ -13,7 +13,7 @@ module.exports = app => {
 	app.on('release', async context => {
 		app.log("Yayyy we released. Now let's do some stuff!")
 
-		const configPath = 'releaseNotifier.config.json'
+		const configPath = 'releaseBuddy.config.json'
 		const config = await getConfig(app.log, context, configPath)
 		const { release, repository } = context.payload
 
