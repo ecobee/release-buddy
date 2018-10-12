@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 const slackifyMarkdown = require('slackify-markdown')
 
 const slackNotify = async (slackSettings, repositoryName, releaseDetails, teamName) => {
-	const { slackWebhookUrl, userName, channel, iconEmoji, shipEmojis } = slackSettings
+	const { slackWebhookUrl, userName, channels, iconEmoji, shipEmojis } = slackSettings
 	const { name: releaseName, body, url, version } = releaseDetails
 
 	const releaseNotes = slackifyMarkdown(body)
@@ -13,24 +13,27 @@ const slackNotify = async (slackSettings, repositoryName, releaseDetails, teamNa
 
 	const slackMessageText = `${showShipEmojis} \n\n${includeTeamName}*Repo:* ${repositoryName} \n\n*Version:* \`${version}\` \n\n${includeReleaseName}<${url}|View release on Github> \n\n${showShipEmojis}\n\n *Release Notes:*`
 
-	const data = {
-		text: slackMessageText,
-		attachments: [
-			{
-				text: releaseNotes,
-			},
-		],
-		username: userName || `Release Notifier Bot`,
-		icon_emoji: iconEmoji,
-		channel,
-	}
+	channels.forEach(async channel => {
+		const data = {
+			text: slackMessageText,
+			attachments: [
+				{
+					text: releaseNotes,
+				},
+			],
+			username: userName || `ReleaseBuddy Bot`,
+			icon_emoji: iconEmoji,
+			channel,
+		}
 
-	const slackMsg = await fetch(slackWebhookUrl, {
-		method: 'POST',
-		body: JSON.stringify(data),
-		headers: { 'Content-Type': 'application/json' },
+		const slackMsg = await fetch(slackWebhookUrl, {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: { 'Content-Type': 'application/json' },
+		})
+		console.log(slackMsg)
+		return slackMsg
 	})
-	return slackMsg
 }
 
 module.exports = slackNotify
