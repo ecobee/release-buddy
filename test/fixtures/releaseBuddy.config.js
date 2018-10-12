@@ -5,7 +5,7 @@ const slackAndEmail = {
 		slackWebhookUrl:
 			'https://hooks.slack.com/services/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',
 		userName: 'Cam Sloan Ship Bot',
-		channel: '@cam',
+		channels: ['@cam'],
 		iconEmoji: ':ship:',
 		shipEmojis: ':ship: :ship_it_parrot: :rocket: :ship_it_parrot: :ship:',
 	},
@@ -29,7 +29,7 @@ const slackOnly = {
 		slackWebhookUrl:
 			'https://hooks.slack.com/services/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',
 		userName: 'Cam Sloan Ship Bot',
-		channel: '@cam',
+		channels: ['@cam'],
 		iconEmoji: ':ship:',
 		shipEmojis: ':ship: :ship_it_parrot: :rocket: :ship_it_parrot: :ship:',
 	},
