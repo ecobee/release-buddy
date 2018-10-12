@@ -34,12 +34,26 @@ module.exports = app => {
 		const { name: repositoryName } = repository
 
 		if (slackSettings && slackSettings.enabled === true) {
-			const responseMsg = await slackNotify(slackSettings, repositoryName, releaseDetails, teamName)
+			app.log('Delivering Slack notifications.')
 
-			app.log(responseMsg)
+			try {
+				const responseMsg = await slackNotify(
+					slackSettings,
+					repositoryName,
+					releaseDetails,
+					teamName
+				)
+				app.log('Slack notifications delivered.')
+				app.log(responseMsg)
+			} catch (error) {
+				app.log('Error delivering slack notification.')
+				app.log(error)
+			}
 		}
 
 		if (emailSettings && emailSettings.enabled === true) {
+			app.log('Delivering email notifications.')
+
 			try {
 				const mailResponse = await sendEmail(
 					emailSettings,
@@ -48,6 +62,7 @@ module.exports = app => {
 					teamName
 				)
 				app.log(mailResponse)
+				app.log('Email notifications delivered.')
 			} catch (error) {
 				app.log('Error sending email.')
 				app.log(error)
