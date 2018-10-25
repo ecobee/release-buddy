@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "Release buddy helps orchestrate some of the tasks needed when releasing code.",
 	"author": "Cam Sloan <cam@sloan.ca>",
-	"license": "ISC",
 	"repository": "https://github.com/camsloanftc/release-buddy.git",
 	"homepage": "https://github.com/camsloanftc/release-buddy",
 	"bugs": "https://github.com/camsloanftc/release-buddy/issues",
