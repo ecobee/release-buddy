@@ -16,7 +16,7 @@ functions:
       WEBHOOK_SECRET: ${ssm:release-buddy-webhook-secret}
       PRIVATE_KEY: ${ssm:release-buddy-private-key}
       SENDGRID_API_KEY: ${ssm:release-buddy-sendgrid-api-key}
-      APP_ID: 18325
+      APP_ID: ${ssm:release-buddy-app-id}
       LOG_FORMAT: json
 
     events:
