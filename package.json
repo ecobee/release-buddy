@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "Release buddy helps orchestrate some of the tasks needed when releasing code.",
 	"author": "Cam Sloan <cam@sloan.ca>",
-	"license": "ISC",
 	"repository": "https://github.com/camsloanftc/release-buddy.git",
 	"homepage": "https://github.com/camsloanftc/release-buddy",
 	"bugs": "https://github.com/camsloanftc/release-buddy/issues",
@@ -40,6 +39,7 @@
 		"jest": "^22.4.3",
 		"nodemon": "^1.17.2",
 		"prettier": "^1.14.2",
+		"serverless": "^1.34.1",
 		"serverless-offline": "^3.25.17",
 		"smee-client": "^1.0.2",
 		"standard": "^10.0.3"
