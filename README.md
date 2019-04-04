@@ -10,7 +10,7 @@ This is the repository for the **Release Buddy** Github bot. Release Buddy is in
 
 ### Application structure
 
-`handler.js`: When you deploy this to a lambda on AWS, handler.js will be the official entry point. 
+`handler.js`: When you deploy this to a cloud function on GCP, handler.js will be the official entry point.
 
 `index.js`: handler is really just a wrapper around the index file, which serves the bulk of the application code. When you run the application locally, it is being served by index.js.
 
@@ -26,29 +26,26 @@ yarn install
 yarn start
 ```
 
-- Visit the url that is created when you run your setup and follow the instructions to setup your github app. The webhook url can be your local smee url for now, but you will eventually want to replace this with the lambda url once you deploy it to AWS.
+- Visit the url that is created when you run your setup and follow the instructions to setup your github app. The webhook url can be your local smee url for now, but you will eventually want to replace this with the GCF url once you deploy it to GCP.
 
 - Add the required environment variables from the `.env.example` file to a `.env` file in the root folder.
 
-- Setup serverless to work with your AWS account. See the [Quick Start](https://serverless.com/framework/docs/providers/aws/guide/quick-start#pre-requisites) guide.
+- Setup serverless to work with your GCP account. See the [Quick Start](https://serverless.com/framework/docs/providers/google/guide/quick-start#pre-requisites) guide.
 
-- Add the required environment variables to your [AWS Parameter Store](https://us-east-2.console.aws.amazon.com/systems-manager/parameters/create), so they can be accessed from the lambda once it has been deployed. You can find the references to these environment variables in the `serverless.yml` file under `functions` > `environment`. They should be entered into Parameter store using that same format (ex: `release-buddy-webhook-secret`).
+- Deploy the function using `yarn deploy`.
 
-- Deploy the lambda using `yarn serverless deploy`.
-
-- Update the webhook url Github App you created earlier in your [Developer settings](https://github.com/settings/apps). Select the app name you created, and edit the **Webhook URL** field to the AWS lambda field you deployed.
+- Update the webhook url Github App you created earlier in your [Developer settings](https://github.com/settings/apps). Select the app name you created, and edit the **Webhook URL** field to the URL of the GCF you deployed.
 
 ### Using Release Buddy in your project
 
-Once you have setup the Release Buddy AWS lambda server and created the Github App, you can add Release Buddy to your Github projects following the directions below.
+Once you have setup the Release Buddy GCF and created the Github App, you can add Release Buddy to your Github projects following the directions below.
 
 - Add a `releaseBuddy.config.json` file to the root of your projects. See the configuration details below.
 
-``` json
+```json
 {
 	"teamName": "Consumer Website Team", // Enter the name of your team.
 	"slackSettings": {
-        
 		"enabled": true, // enable/disable the Slack notifier
 		"slackWebhookUrl": "https://hooks.slack.com/your-slack-webhook-url-here", // your Slack webhook url
 		"userName": "Release Buddy", // Slackbot user name
@@ -57,8 +54,8 @@ Once you have setup the Release Buddy AWS lambda server and created the Github A
 		"shipEmojis": ":ship: :ship_it_parrot: :rocket: :ship_it_parrot: :ship:" // These will appear in the slack message to add some pizazz to your release message
 	},
 	"emailSettings": {
-        "enabled": true, // enable/disable the email notifier
-        // Sendgrid api docs for formatting: https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html
+		"enabled": true, // enable/disable the email notifier
+		// Sendgrid api docs for formatting: https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html
 		"to": {
 			"name": "Release Buddy", // Replace with any name.
 			"email": "no-reply@ecobee.com" // Replace with email of your choice.
