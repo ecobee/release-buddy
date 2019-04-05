@@ -22,6 +22,7 @@ functions:
       WEBHOOK_SECRET: ${env:WEBHOOK_SECRET}
       PRIVATE_KEY: ${env:PRIVATE_KEY}
       APP_ID: ${env:APP_ID}
+      SENDGRID_API_KEY: ${env:SENDGRID_API_KEY}
       LOG_FORMAT: json
 
     events:
