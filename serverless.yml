@@ -1,25 +1,29 @@
 service: release-buddy
 
+package:
+  exclude:
+    - ./test/**
+
 provider:
-  name: aws
-  runtime: nodejs8.10
-  region: us-east-1
+  name: google
+  runtime: nodejs8
+  project: ${env:GCP_PROJECT}
+  credentials: ${env:GCP_CREDENTIALS}
 
 plugins:
+  - serverless-google-cloudfunctions
   - serverless-offline
 
 functions:
   release-buddy:
-    handler: handler.probot
+    handler: probot
 
     environment:
-      WEBHOOK_SECRET: ${ssm:release-buddy-webhook-secret}
-      PRIVATE_KEY: ${ssm:release-buddy-private-key}
-      SENDGRID_API_KEY: ${ssm:release-buddy-sendgrid-api-key}
-      APP_ID: ${ssm:release-buddy-app-id}
+      WEBHOOK_SECRET: ${env:WEBHOOK_SECRET}
+      PRIVATE_KEY: ${env:PRIVATE_KEY}
+      APP_ID: ${env:APP_ID}
+      SENDGRID_API_KEY: ${env:SENDGRID_API_KEY}
       LOG_FORMAT: json
 
     events:
-      - http:
-          path: /probot
-          method: post
+      - http: /probot
