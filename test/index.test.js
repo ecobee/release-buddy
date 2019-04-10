@@ -1,6 +1,6 @@
 const { Application } = require('probot')
 // Requiring our app implementation
-const myProbotApp = require('..')
+const myProbotApp = require('../index')
 
 const releasePublishedPayload = require('./fixtures/release.published.json')
 const { slackAndEmail, emailOnly, slackOnly } = require('./fixtures/releaseBuddy.config')
