@@ -11,26 +11,21 @@
 		"github",
 		"probot-app"
 	],
-	"main": "handler.js",
 	"scripts": {
 		"simulate": "yarn probot simulate release test/fixtures/release.published.json ./index.js",
 		"dev": "nodemon",
 		"start": "probot run ./index.js",
 		"lint": "standard --fix",
 		"test": "jest",
-		"test:watch": "jest --watch --notify --notifyMode=change --coverage",
-		"deploy": "node_modules/.bin/dotenv serverless deploy"
+		"test:watch": "jest --watch --notify --notifyMode=change --coverage"
 	},
 	"dependencies": {
-		"@probot/serverless-gcf": "^0.2.0",
+		"@probot/serverless-lambda": "^0.2.0",
 		"@sendgrid/mail": "^6.3.1",
-		"dotenv": "^7.0.0",
-		"dotenv-cli": "^2.0.0",
 		"markdown": "^0.5.0",
 		"node-fetch": "^2.2.0",
 		"probot": "^7.2.0",
 		"remove-markdown": "^0.3.0",
-		"serverless-google-cloudfunctions": "^2.3.2",
 		"slackify-markdown": "^1.0.4"
 	},
 	"devDependencies": {
@@ -42,7 +37,7 @@
 		"eslint-plugin-jsx-a11y": "^6.1.1",
 		"eslint-plugin-react": "^7.11.0",
 		"jest": "^22.4.3",
-		"nodemon": "^1.18.10",
+		"nodemon": "^1.17.2",
 		"prettier": "^1.14.2",
 		"serverless": "^1.34.1",
 		"serverless-offline": "^3.25.17",

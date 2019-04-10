@@ -1,5 +1,5 @@
 // handler.js
-const { serverless } = require('@probot/serverless-gcf')
-const appFn = require('./index')
+const { serverless } = require('@probot/serverless-lambda')
+const appFn = require('./')
 
 module.exports.probot = serverless(appFn)
