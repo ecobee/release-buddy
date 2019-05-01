@@ -10,7 +10,7 @@ const sendEmail = require('./src/sendMail')
 module.exports = app => {
 	app.log('Yay, the app was loaded!')
 
-	app.on('release', async context => {
+	app.on('release.published', async context => {
 		app.log("Yayyy we released. Now let's do some stuff!")
 
 		const configPath = 'releaseBuddy.config.json'
