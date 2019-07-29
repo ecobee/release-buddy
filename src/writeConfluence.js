@@ -10,13 +10,15 @@ const config = {
 const CONFLUENCE_QA_SPACE = "~538406635"
 let CONFLUENCE_PARENT_ID = 898107893
 
-const writeConfluence = async (releaseDetails, repositoryName, teamName) => {
+const writeConfluence = async (releaseDetails, repositoryName, releaseName, teamName) => {
 
     const confluence = new Confluence(config)
 
     const { body, version } = releaseDetails
 
-    const html = markdown.toHTML(body)
+    const includeTeamName = teamName ? `<p><strong>Team:&nbsp;${teamName}<br /></strong></p>` : ''
+    const includeReleaseName = releaseName ? `<p><strong>Release Name:<br /></strong>${releaseName}</p>` : ''
+    const html = `${includeTeamName} <br/> ${includeReleaseName} <br/> ${markdown.toHTML(body)}`
 
     const today = new Date();
     const date = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`
