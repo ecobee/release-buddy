@@ -81,7 +81,9 @@ module.exports = app => {
 
 			try {
 				const confluenceResponse = await writeConfluence(
+					app.log,
 					releaseDetails,
+					repositoryName,
 					teamName
 				)
 				app.log(confluenceResponse)

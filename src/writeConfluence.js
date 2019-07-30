@@ -6,22 +6,30 @@ const config = {
     password: process.env.CONFLUENCE_API_KEY,
     baseUrl:  "https://ecobee.atlassian.net/wiki"
 }
+const confluence = new Confluence(config)
 
 const CONFLUENCE_QA_SPACE = "~538406635"
-let CONFLUENCE_PARENT_ID = 898107893
 
-const writeConfluence = async (releaseDetails, repositoryName, releaseName, teamName) => {
+const createConfluencePageForRelease = (space, title, html, parentId) => {
+    confluence.postContent(space, title, html, parentId, (err, response) => {
+        if(err) {
+            throw new Error(response.text)
+        } 
+        return response
+    });
+}
 
-    const confluence = new Confluence(config)
+const writeConfluence = async (log, releaseDetails, repositoryName, teamName) => {
 
-    const { body, version } = releaseDetails
+    const { name, body, version } = releaseDetails
 
-    const includeTeamName = teamName ? `<p><strong>Team:&nbsp;${teamName}<br /></strong></p>` : ''
-    const includeReleaseName = releaseName ? `<p><strong>Release Name:<br /></strong>${releaseName}</p>` : ''
-    const html = `${includeTeamName} <br/> ${includeReleaseName} <br/> ${markdown.toHTML(body)}`
+    const includeTeamName = teamName ? `<p><strong>Team: ${teamName}<br /></strong></p>` : ''
+    const includeReleaseName = name ? `<p><strong>Release Name: ${name}<br /></strong></p>` : ''
+    const html = `${includeTeamName} ${includeReleaseName} <p><strong>Notes:<br /></strong></p> ${markdown.toHTML(body)}`
 
     const today = new Date();
-    const date = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`
+    const month = `0${today.getMonth()+1}`.slice(-2)
+    const date = `${today.getFullYear()}-${month}-${today.getDate()}`
     const title = `${date} - ${repositoryName} ${version}`
     
     // Find the Releases page for the current year
@@ -29,25 +37,22 @@ const writeConfluence = async (releaseDetails, repositoryName, releaseName, team
         if(response.size === 0) {
             
             // Create the page if it doesn't exist
-            const childList = "<p><ac:structured-macro ac:name=\"children\" ac:schema-version=\"2\" ac:macro-id=\"14a02977-0f20-48cf-bba0-d2002db0e806\"><ac:parameter ac:name=\"all\">true</ac:parameter></ac:structured-macro></p>"
+            const childList = `<p><ac:structured-macro ac:name="children" ac:schema-version="2" ac:macro-id="14a02977-0f20-48cf-bba0-d2002db0e806"><ac:parameter ac:name="all">true</ac:parameter></ac:structured-macro></p>`
             confluence.postContent(CONFLUENCE_QA_SPACE, `${today.getFullYear()} Releases`, childList, null, (err, response) => {
-                console.log(JSON.stringify(response))
-                if(response.statusCode === 200) {
-                    CONFLUENCE_PARENT_ID = response.results[0].id
-                }
+                if(err) {
+                    log(`An error has occurred: ${err}`)
+                    throw new Error(response.text)
+                } 
+
+                log("Created yearly release page, time to create project release page")
+                return createConfluencePageForRelease(CONFLUENCE_QA_SPACE, title, html, response.results[0].id)
+                
             });
         } else {
-            CONFLUENCE_PARENT_ID = response.results[0].id
+            log("Time to create project release page")
+            return createConfluencePageForRelease(CONFLUENCE_QA_SPACE, title, html, response.results[0].id)
         }
     });
-
-    console.log(CONFLUENCE_PARENT_ID)
-
-    // create new page for current release
-    // const response = await confluence.postContent(CONFLUENCE_QA_SPACE, title, html, CONFLUENCE_PARENT_ID);
-
-    // return response
-    return true
 }
 
 module.exports = writeConfluence
