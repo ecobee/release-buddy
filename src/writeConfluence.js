@@ -8,7 +8,7 @@ const config = {
 }
 const confluence = new Confluence(config)
 
-const CONFLUENCE_QA_SPACE = "~538406635"
+const CONFLUENCE_QA_SPACE = "QA"
 
 const createConfluencePageForRelease = (space, title, html, parentId) => {
     confluence.postContent(space, title, html, parentId, (err, response) => {
