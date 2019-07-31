@@ -8,18 +8,9 @@ const config = {
 }
 const confluence = new Confluence(config)
 
-const createConfluencePageForRelease = (space, title, html, parentId) => {
-    confluence.postContent(space, title, html, parentId, (err, response) => {
-        if(err) {
-            throw new Error(response.text)
-        } 
-        return response
-    });
-}
-
 const writeConfluence = async (log, settings, releaseDetails, repositoryName, teamName) => {
 
-    const { space } = settings
+    const { space, parentId } = settings
     const { name, body, version } = releaseDetails
 
     const includeTeamName = teamName ? `<p><strong>Team: ${teamName}<br /></strong></p>` : ''
@@ -30,27 +21,13 @@ const writeConfluence = async (log, settings, releaseDetails, repositoryName, te
     const month = `0${today.getMonth()+1}`.slice(-2)
     const date = `${today.getFullYear()}-${month}-${today.getDate()}`
     const title = `${date} - ${repositoryName} ${version}`
-    
-    // Find the Releases page for the current year
-    confluence.getContentByPageTitle(space, `${today.getFullYear()} Releases`, (err, response) => {
-        if(response.size === 0) {
-            
-            // Create the page if it doesn't exist
-            const childList = `<p><ac:structured-macro ac:name="children" ac:schema-version="2" ac:macro-id="14a02977-0f20-48cf-bba0-d2002db0e806"><ac:parameter ac:name="all">true</ac:parameter></ac:structured-macro></p>`
-            confluence.postContent(space, `${today.getFullYear()} Releases`, childList, null, (err, response) => {
-                if(err) {
-                    log(`An error has occurred: ${err}`)
-                    throw new Error(response.text)
-                } 
 
-                log("Created yearly release page, time to create project release page")
-                return createConfluencePageForRelease(space, title, html, response.results[0].id)
-                
-            });
-        } else {
-            log("Time to create project release page")
-            return createConfluencePageForRelease(space, title, html, response.results[0].id)
-        }
+    // Create a wiki page for the current release as a child to the specified parent in the specified space in the config
+    confluence.postContent(space, title, html, parentId, (err, response) => {
+        if(err) {
+            throw new Error(response.text)
+        } 
+        return response
     });
 }
 
