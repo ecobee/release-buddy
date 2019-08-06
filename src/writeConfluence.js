@@ -1,14 +1,24 @@
 const { markdown } = require('markdown')
 const Confluence = require('confluence-api')
 
-const config = {
-    username: process.env.CONFLUENCE_USER,
-    password: process.env.CONFLUENCE_API_KEY,
-    baseUrl:  process.env.CONFLUENCE_BASE_URL
-}
-const confluence = new Confluence(config)
+const writeConfluence = async (settings, releaseDetails, repositoryName, teamName) => {
 
-const writeConfluence = async (log, settings, releaseDetails, repositoryName, teamName) => {
+    let confluence = null
+
+    if (
+        process.env.CONFLUENCE_USER &&
+        process.env.CONFLUENCE_API_KEY &&
+        process.env.CONFLUENCE_BASE_URL
+    ) {
+        const config = {
+            username: process.env.CONFLUENCE_USER,
+            password: process.env.CONFLUENCE_API_KEY,
+            baseUrl: process.env.CONFLUENCE_BASE_URL,
+        }
+        confluence = new Confluence(config)
+    } else {
+        throw new Error("Missing Confluence environment variables.")
+    }
 
     const { space, parentId } = settings
     const { name, body, version } = releaseDetails

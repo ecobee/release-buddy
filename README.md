@@ -68,7 +68,7 @@ Once you have setup the Release Buddy GCF and created the Github App, you can ad
 	},
 	"confluenceSettings": {
 		"enabled": true, // enable/disable the confluence notifier
-		"confluenceSpace": "12345", // Replace with your preferred confluence space
+		"space": "12345", // Replace with your preferred confluence space
 		"parentId": "12345" // A null value will cause the page to be added under the space's home page
 	}
 }
