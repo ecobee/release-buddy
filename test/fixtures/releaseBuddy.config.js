@@ -1,4 +1,4 @@
-const slackAndEmail = {
+const slackEmailAndConfluence = {
 	teamName: 'Cam Sloan',
 	slackSettings: {
 		enabled: true,
@@ -20,6 +20,10 @@ const slackAndEmail = {
 			email: 'releases@cam.sloan.ca',
 		},
 	},
+	confluenceSettings: {
+		enabled: true,
+		"confluenceSpace": "12345"
+	}
 }
 
 const slackOnly = {
@@ -50,8 +54,17 @@ const emailOnly = {
 	},
 }
 
+const confluenceOnly = {
+	teamName: 'Cam Sloan',
+	confluenceSettings: {
+		enabled: true,
+		"confluenceSpace": "12345"
+	}
+}
+
 module.exports = {
-	slackAndEmail,
+	slackEmailAndConfluence,
 	slackOnly,
 	emailOnly,
+	confluenceOnly
 }
