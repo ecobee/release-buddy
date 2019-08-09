@@ -1331,6 +1331,13 @@ configstore@^3.0.0:
     write-file-atomic "^2.0.0"
     xdg-basedir "^3.0.0"
 
+confluence-api@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/confluence-api/-/confluence-api-1.4.0.tgz#2270a58838300989a6fb037e5f48e5767be75b9e"
+  integrity sha512-VFQKC5fE/PQgIXD94XvF3MtalClUcmTiBwoWuIrqKBct3NY1dqN8XazpxlCLlZ8fJo9MJowWvDfsxZamO3t8ww==
+  dependencies:
+    superagent "^3.8.3"
+
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"

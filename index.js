@@ -6,6 +6,7 @@
 const getConfig = require('./src/getConfig')
 const slackNotify = require('./src/slackNotify')
 const sendEmail = require('./src/sendMail')
+const writeConfluence = require('./src/writeConfluence')
 
 module.exports = app => {
 	app.log('Yay, the app was loaded!')
@@ -30,7 +31,7 @@ module.exports = app => {
 			)
 			return
 		}
-		const { slackSettings, emailSettings, teamName } = config
+		const { slackSettings, emailSettings, confluenceSettings, teamName } = config
 		const { name: repositoryName } = repository
 
 		if (slackSettings && slackSettings.enabled === true) {
@@ -65,6 +66,30 @@ module.exports = app => {
 				app.log('Email notifications delivered.')
 			} catch (error) {
 				app.log('Error sending email.')
+				app.log(error)
+
+				if (error.response.body.errors) {
+					app.log(error.response.body.errors)
+				} else {
+					app.log(error)
+				}
+			}
+		}
+
+		if (confluenceSettings && confluenceSettings.enabled === true) {
+			app.log('Writing confluence wiki pages.')
+
+			try {
+				const confluenceResponse = await writeConfluence(
+					confluenceSettings,
+					releaseDetails,
+					repositoryName,
+					teamName
+				)
+				app.log(confluenceResponse)
+				app.log('Confluence wiki written.')
+			} catch (error) {
+				app.log('Error writing confluence wiki.')
 				app.log(error)
 
 				if (error.response.body.errors) {
