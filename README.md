@@ -58,12 +58,12 @@ Once you have setup the Release Buddy GCF and created the Github App, you can ad
 		// Sendgrid api docs for formatting: https://sendgrid.com/docs/API_Reference/Web_API_v3/Mail/index.html
 		"to": {
 			"name": "Release Buddy", // Replace with any name.
-			"email": "no-reply@ecobee.com" // Replace with email of your choice.
+			"email": "no-reply@company.com" // Replace with email of your choice.
 		},
-		"bcc": ["cam.s@ecobee.com"], // Array of emails to notify
+		"bcc": ["email@company.com"], // Array of emails to notify
 		"from": {
 			"name": "Release Buddy", // Replace with any name.
-			"email": "no-reply@ecobee.com" // Replace with email of your choice.
+			"email": "no-reply@company.com" // Replace with email of your choice.
 		}
 	}
 }
