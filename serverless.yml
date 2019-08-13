@@ -23,6 +23,9 @@ functions:
       PRIVATE_KEY: ${env:PRIVATE_KEY}
       APP_ID: ${env:APP_ID}
       SENDGRID_API_KEY: ${env:SENDGRID_API_KEY}
+      CONFLUENCE_USER: ${env:CONFLUENCE_USER}
+      CONFLUENCE_API_KEY: ${env:CONFLUENCE_API_KEY}
+      CONFLUENCE_BASE_URL: ${env:CONFLUENCE_BASE_URL}
       LOG_FORMAT: json
 
     events:

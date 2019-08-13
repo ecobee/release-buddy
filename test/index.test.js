@@ -3,15 +3,17 @@ const { Application } = require('probot')
 const myProbotApp = require('../index')
 
 const releasePublishedPayload = require('./fixtures/release.published.json')
-const { slackAndEmail, emailOnly, slackOnly } = require('./fixtures/releaseBuddy.config')
+const { slackEmailAndConfluence, emailOnly, slackOnly, confluenceOnly } = require('./fixtures/releaseBuddy.config')
 
 const getConfig = require('../src/getConfig')
 const slackNotify = require('../src/slackNotify')
 const sendEmail = require('../src/sendMail')
+const writeConfluence = require('../src/writeConfluence')
 
 jest.mock('../src/getConfig')
 jest.mock('../src/slackNotify')
 jest.mock('../src/sendMail')
+jest.mock('../src/writeConfluence')
 
 describe('My Probot app', () => {
 	let app
@@ -79,8 +81,30 @@ describe('My Probot app', () => {
 		expect(sendEmail).not.toHaveBeenCalled()
 	})
 
-	test('it calls both sendEmail and slackNotify when enabled in the settings.', async () => {
-		getConfig.mockReturnValueOnce(slackAndEmail)
+	test('calls writeConfluence when it is enabled in the settings.', async () => {
+		getConfig.mockReturnValueOnce(confluenceOnly)
+
+		await app.receive({
+			name: 'release',
+			payload: releasePublishedPayload,
+		})
+
+		expect(writeConfluence).toHaveBeenCalled()
+	})
+
+	test('does not call writeConfluence when it is not enabled in the settings.', async () => {
+		getConfig.mockReturnValueOnce(slackOnly)
+
+		await app.receive({
+			name: 'release',
+			payload: releasePublishedPayload,
+		})
+
+		expect(writeConfluence).not.toHaveBeenCalled()
+	})
+
+	test('it calls both sendEmail, slackNotify and writeConfluence when enabled in the settings.', async () => {
+		getConfig.mockReturnValueOnce(slackEmailAndConfluence)
 
 		await app.receive({
 			name: 'release',
@@ -89,6 +113,7 @@ describe('My Probot app', () => {
 
 		expect(sendEmail).toHaveBeenCalled()
 		expect(slackNotify).toHaveBeenCalled()
+		expect(writeConfluence).toHaveBeenCalled()
 	})
 })
 
