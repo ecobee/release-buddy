@@ -1,11 +1,12 @@
+
 const slackEmailAndConfluence = {
-	teamName: 'Cam Sloan',
+	teamName: 'Instinct Team',
 	slackSettings: {
 		enabled: true,
 		slackWebhookUrl:
 			'https://hooks.slack.com/services/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',
-		userName: 'Cam Sloan Ship Bot',
-		channels: ['@cam'],
+		userName: 'Marowak',
+		channels: ['@instinct'],
 		iconEmoji: ':ship:',
 		shipEmojis: ':ship: :ship_it_parrot: :rocket: :ship_it_parrot: :ship:',
 	},
@@ -13,11 +14,11 @@ const slackEmailAndConfluence = {
 		enabled: true,
 		to: {
 			name: 'Release Buddy',
-			email: 'cam@sloan.ca',
+			email: 'marowak@instinct.com',
 		},
 		from: {
 			name: 'Release Buddy',
-			email: 'releases@cam.sloan.ca',
+			email: 'releases@instinct.com',
 		},
 	},
 	confluenceSettings: {
@@ -27,35 +28,35 @@ const slackEmailAndConfluence = {
 }
 
 const slackOnly = {
-	teamName: 'Cam Sloan',
+	teamName: 'Mystic Team',
 	slackSettings: {
 		enabled: true,
 		slackWebhookUrl:
 			'https://hooks.slack.com/services/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',
-		userName: 'Cam Sloan Ship Bot',
-		channels: ['@cam'],
+		userName: 'Pikachu',
+		channels: ['@mystic'],
 		iconEmoji: ':ship:',
 		shipEmojis: ':ship: :ship_it_parrot: :rocket: :ship_it_parrot: :ship:',
 	},
 }
 
 const emailOnly = {
-	teamName: 'Cam Sloan',
+	teamName: 'Valor Team',
 	emailSettings: {
 		enabled: true,
 		to: {
 			name: 'Release Buddy',
-			email: 'cam@sloan.ca',
+			email: 'charmeleon@valor.com',
 		},
 		from: {
 			name: 'Release Buddy',
-			email: 'releases@cam.sloan.ca',
+			email: 'releases@valor.com',
 		},
 	},
 }
 
 const confluenceOnly = {
-	teamName: 'Cam Sloan',
+	teamName: 'Diamond Team',
 	confluenceSettings: {
 		enabled: true,
 		"confluenceSpace": "12345"
